@@ -285,6 +285,90 @@
   .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
 
   @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ========== SPIN WHEEL OVERLAY ========== */
+  .wheel-overlay {
+    display: none; position: fixed; inset: 0; z-index: 9999;
+    background: rgba(10,10,10,0.92); backdrop-filter: blur(8px);
+    justify-content: center; align-items: center; flex-direction: column;
+    animation: fadeUp 0.3s ease both;
+  }
+  .wheel-overlay.active { display: flex; }
+  .wheel-overlay .wheel-inner {
+    text-align: center; max-width: 420px; padding: 24px; width: 100%;
+  }
+  .wheel-overlay .wheel-eyebrow {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.18em; color: rgba(244,241,234,0.5); margin-bottom: 16px;
+  }
+  .wheel-overlay .wheel-title {
+    font-family: 'Fraunces', serif; font-weight: 900; color: var(--paper);
+    font-size: clamp(24px, 4vw, 36px); line-height: 1.05; margin-bottom: 24px;
+  }
+  .wheel-overlay .wheel-title .ital { font-style: italic; font-weight: 400; }
+
+  /* THE WHEEL */
+  .wheel-wrap { position: relative; width: 300px; height: 300px; margin: 0 auto 32px; }
+  @media (max-width: 400px) { .wheel-wrap { width: 260px; height: 260px; } }
+  .wheel-pointer {
+    position: absolute; top: -18px; left: 50%; transform: translateX(-50%); z-index: 3;
+    width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent;
+    border-top: 28px solid var(--paper); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  }
+  .wheel-canvas {
+    width: 100%; height: 100%; border-radius: 50%;
+    border: 3px solid var(--paper); box-shadow: 0 0 0 8px rgba(244,241,234,0.1), 0 0 40px rgba(0,0,0,0.3);
+    transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+  }
+  .wheel-canvas.spinning { pointer-events: none; }
+  .wheel-spin-btn {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2;
+    width: 70px; height: 70px; border-radius: 50%; background: var(--ink); color: var(--paper);
+    border: 3px solid var(--paper); font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer;
+    transition: transform 0.2s, background 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+  .wheel-spin-btn:hover { transform: translate(-50%, -50%) scale(1.08); background: #222; }
+  .wheel-spin-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .wheel-spin-btn:disabled:hover { transform: translate(-50%, -50%); background: var(--ink); }
+
+  /* RESULT STATES */
+  .wheel-result { display: none; text-align: center; }
+  .wheel-result.active { display: block; animation: fadeUp 0.5s ease both; }
+
+  .voucher-card {
+    background: var(--paper); color: var(--ink); padding: 32px 28px; margin: 24px auto;
+    max-width: 360px; border: 2px dashed var(--ink); position: relative;
+  }
+  .voucher-card .voucher-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 8px;
+  }
+  .voucher-card .voucher-code {
+    font-family: 'JetBrains Mono', monospace; font-size: 40px; font-weight: 700;
+    letter-spacing: 0.15em; line-height: 1; margin-bottom: 8px;
+  }
+  .voucher-card .voucher-amount {
+    font-family: 'Fraunces', serif; font-weight: 900; font-size: 28px; margin-bottom: 4px;
+  }
+  .voucher-card .voucher-timer {
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #c0392b; font-weight: 700; margin-top: 12px;
+  }
+  .voucher-card .voucher-timer span { font-size: 20px; }
+
+  .lose-msg { color: var(--paper); margin: 24px 0; }
+  .lose-msg .lose-icon { font-size: 48px; margin-bottom: 12px; }
+  .lose-msg h3 {
+    font-family: 'Fraunces', serif; font-weight: 700; font-size: 24px; margin-bottom: 8px;
+  }
+  .lose-msg p { font-size: 15px; opacity: 0.7; line-height: 1.5; margin-bottom: 24px; }
+
+  .wheel-close {
+    position: absolute; top: 20px; right: 24px; background: none; border: none;
+    color: rgba(244,241,234,0.5); font-size: 28px; cursor: pointer; font-family: inherit;
+    padding: 8px; line-height: 1;
+  }
+  .wheel-close:hover { color: var(--paper); }
   .hidden { display: none !important; }
   .footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--ink); display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); }
 </style>
@@ -478,7 +562,7 @@
             <div class="lock-icon">&#x1F512;</div>
             <div class="lock-text">Unlock your full roadmap</div>
             <div class="lock-sub">Your MOFU & BOFU strategy is inside Ruang Kreatif — 15 modules designed for your exact archetype.</div>
-            <a href="landing.html" class="btn" style="text-decoration:none;">See Full Masterclass Details <span class="arrow">&rarr;</span></a>
+            <button class="btn" onclick="openWheel()" style="text-decoration:none;">Unlock a Special Offer <span class="arrow">&rarr;</span></button>
           </div>
           <div class="blur-content">
             <div class="roadmap-row">
@@ -501,8 +585,11 @@
       <p>15 modules of Ruang Kreatif are built so your archetype isn't just a label —
         it becomes the engine driving you from 0 to 100K followers, from 0 to first income,
         from random ideas to a signature framework.</p>
-      <a href="landing.html" class="btn" style="text-decoration:none;">See Full Masterclass Details <span class="arrow">&rarr;</span></a>
-      <div class="actions">
+      <button class="btn" onclick="openWheel()" style="background:var(--paper);color:var(--ink);border-color:var(--paper);cursor:pointer;">Try Your Luck — Spin for a Discount <span class="arrow">&rarr;</span></button>
+      <div style="margin-top:12px;">
+        <a href="landing.html" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(244,241,234,0.5);text-decoration:underline;text-underline-offset:4px;letter-spacing:0.1em;">or skip to masterclass details</a>
+      </div>
+      <div class="actions" style="margin-top:20px;">
         <button class="btn ghost" style="background:transparent;color:var(--paper);border-color:var(--paper);" onclick="shareResult()">Share to IG Story</button>
         <button class="btn ghost" style="background:transparent;color:var(--paper);border-color:var(--paper);" onclick="restart()">Retake Test</button>
       </div>
@@ -511,6 +598,70 @@
   </section>
 
   <div class="footer"><span>&copy; Ruang Kreatif</span><span>DNA Test v2.0</span></div>
+</div>
+
+<!-- ============ SPIN WHEEL OVERLAY ============ -->
+<div class="wheel-overlay" id="wheelOverlay">
+  <button class="wheel-close" onclick="closeWheel()">&times;</button>
+  <div class="wheel-inner">
+
+    <!-- PRE-SPIN STATE -->
+    <div id="wheelPreSpin">
+      <div class="wheel-eyebrow">Exclusive for DNA Test Takers</div>
+      <div class="wheel-title">Spin the wheel.<br><span class="ital">Test your luck.</span></div>
+
+      <div class="wheel-wrap">
+        <div class="wheel-pointer"></div>
+        <canvas id="wheelCanvas" class="wheel-canvas" width="600" height="600"></canvas>
+        <button class="wheel-spin-btn" id="spinBtn" onclick="spinWheel()">SPIN</button>
+      </div>
+
+      <p style="font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(244,241,234,0.4);text-transform:uppercase;letter-spacing:0.12em;">
+        You get one spin. Make it count.
+      </p>
+    </div>
+
+    <!-- WIN STATE -->
+    <div class="wheel-result" id="wheelWin">
+      <div style="font-size:56px;margin-bottom:12px;">&#127881;</div>
+      <div class="wheel-title" style="margin-bottom:4px;">You got lucky.</div>
+      <p style="color:rgba(244,241,234,0.7);font-size:15px;margin-bottom:4px;">Here's your exclusive discount for Ruang Kreatif:</p>
+
+      <div class="voucher-card">
+        <div class="voucher-label">Your Voucher Code</div>
+        <div class="voucher-code">LUCK</div>
+        <div class="voucher-amount">Rp 500.000 OFF</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px;">Apply at checkout</div>
+        <div class="voucher-timer">
+          Expires in <span id="timerDisplay">30:00</span>
+        </div>
+      </div>
+
+      <a href="https://lynk.id/agusleo/AQjXRA8/checkout" target="_blank" rel="noopener noreferrer" class="btn" style="text-decoration:none;margin-bottom:12px;">
+        Use Code & Join Now <span class="arrow">&rarr;</span>
+      </a>
+      <br>
+      <button class="btn ghost" onclick="copyVoucher()" style="margin-top:8px;font-size:11px;padding:12px 20px;">
+        Copy Code: LUCK
+      </button>
+    </div>
+
+    <!-- LOSE STATE -->
+    <div class="wheel-result" id="wheelLose">
+      <div class="lose-msg">
+        <div class="lose-icon">&#128171;</div>
+        <h3>Not this time.</h3>
+        <p>No discount today — but the masterclass is still the best investment you'll make as a creator. Your archetype roadmap is waiting inside.</p>
+      </div>
+      <a href="https://lynk.id/agusleo/AQjXRA8/checkout" target="_blank" rel="noopener noreferrer" class="btn" style="text-decoration:none;background:var(--paper);color:var(--ink);border-color:var(--paper);">
+        Join Ruang Kreatif at Full Price <span class="arrow">&rarr;</span>
+      </a>
+      <div style="margin-top:16px;">
+        <a href="landing.html" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(244,241,234,0.4);text-decoration:underline;text-underline-offset:4px;">see masterclass details first</a>
+      </div>
+    </div>
+
+  </div>
 </div>
 <script>
 /* ====================================================
@@ -1144,6 +1295,174 @@ function restart() {
   archCurrent = 0; stageCurrent = 0;
   document.getElementById('progressFill').style.width = '0%';
   show('intro');
+}
+
+/* ====================================================
+   SPIN WHEEL — GAMIFICATION
+   ==================================================== */
+
+var wheelSegments = [
+  { label: '500RB\nOFF!', win: true, color: '#0a0a0a' },
+  { label: 'SO\nCLOSE', win: false, color: '#c0392b' },
+  { label: '500RB\nOFF!', win: true, color: '#0a0a0a' },
+  { label: 'NEXT\nTIME', win: false, color: '#6b6b6b' },
+  { label: '500RB\nOFF!', win: true, color: '#0a0a0a' },
+  { label: 'ALMOST', win: false, color: '#c0392b' },
+  { label: '500RB\nOFF!', win: true, color: '#0a0a0a' },
+  { label: 'TRY\nAGAIN', win: false, color: '#6b6b6b' }
+];
+
+var wheelHasSpun = false;
+var wheelTimerInterval = null;
+var wheelAngle = 0;
+
+function drawWheel() {
+  var canvas = document.getElementById('wheelCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var cx = 300, cy = 300, r = 290;
+  var n = wheelSegments.length;
+  var arc = (2 * Math.PI) / n;
+
+  ctx.clearRect(0, 0, 600, 600);
+
+  for (var i = 0; i < n; i++) {
+    var angle = i * arc;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, angle, angle + arc);
+    ctx.closePath();
+
+    if (wheelSegments[i].win) {
+      ctx.fillStyle = '#0a0a0a';
+    } else {
+      ctx.fillStyle = (i % 2 === 1) ? '#d4d0c8' : '#ebe7dd';
+    }
+    ctx.fill();
+    ctx.strokeStyle = '#f4f1ea';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Text
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(angle + arc / 2);
+    ctx.textAlign = 'center';
+    ctx.font = 'bold 22px "JetBrains Mono", monospace';
+    ctx.fillStyle = wheelSegments[i].win ? '#f4f1ea' : '#0a0a0a';
+
+    var lines = wheelSegments[i].label.split('\n');
+    for (var li = 0; li < lines.length; li++) {
+      ctx.fillText(lines[li], r * 0.6, (li - (lines.length - 1) / 2) * 24 + 4);
+    }
+    ctx.restore();
+  }
+}
+
+function openWheel() {
+  document.getElementById('wheelOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  if (!wheelHasSpun) {
+    drawWheel();
+    document.getElementById('wheelPreSpin').style.display = 'block';
+    document.getElementById('wheelWin').classList.remove('active');
+    document.getElementById('wheelLose').classList.remove('active');
+  }
+}
+
+function closeWheel() {
+  document.getElementById('wheelOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function spinWheel() {
+  if (wheelHasSpun) return;
+  wheelHasSpun = true;
+
+  var btn = document.getElementById('spinBtn');
+  btn.disabled = true;
+  btn.textContent = '...';
+
+  // Determine outcome: ~60% chance of winning
+  var rand = Math.random();
+  var isWin = rand < 0.6;
+
+  // Pick a target segment
+  var n = wheelSegments.length;
+  var arc = 360 / n;
+  var targetIdx;
+  if (isWin) {
+    // Pick a winning segment
+    var winSegments = [];
+    for (var i = 0; i < n; i++) { if (wheelSegments[i].win) winSegments.push(i); }
+    targetIdx = winSegments[Math.floor(Math.random() * winSegments.length)];
+  } else {
+    // Pick a losing segment
+    var loseSegments = [];
+    for (var i = 0; i < n; i++) { if (!wheelSegments[i].win) loseSegments.push(i); }
+    targetIdx = loseSegments[Math.floor(Math.random() * loseSegments.length)];
+  }
+
+  // Calculate rotation: pointer is at top (12 o'clock = 0deg)
+  // Canvas segment 0 starts at 3 o'clock. Pointer reads top.
+  // To land pointer in middle of segment targetIdx:
+  // The wheel rotates clockwise. Pointer is fixed at top.
+  // Segment i spans from i*arc to (i+1)*arc degrees (measured clockwise from 3 o'clock)
+  // For pointer at top (270 deg in standard), we need the target segment's center to be at 270 deg
+  // Target center in canvas coords: targetIdx * arc + arc/2 (from 3 o'clock)
+  // We need to rotate so that point is at 270: rotation = 270 - (targetIdx*arc + arc/2)
+  var targetCenter = targetIdx * arc + arc / 2;
+  var desiredRotation = 360 - targetCenter; // bring target to top
+  var fullSpins = 5 + Math.floor(Math.random() * 3); // 5-7 full rotations
+  var totalRotation = fullSpins * 360 + desiredRotation + (Math.random() * 10 - 5); // slight jitter
+
+  var canvasEl = document.getElementById('wheelCanvas');
+  canvasEl.classList.add('spinning');
+  canvasEl.style.transform = 'rotate(' + totalRotation + 'deg)';
+
+  // After spin completes (4s transition)
+  setTimeout(function() {
+    document.getElementById('wheelPreSpin').style.display = 'none';
+    if (isWin) {
+      document.getElementById('wheelWin').classList.add('active');
+      startVoucherTimer();
+    } else {
+      document.getElementById('wheelLose').classList.add('active');
+    }
+  }, 4300);
+}
+
+// ---------- VOUCHER TIMER ----------
+function startVoucherTimer() {
+  var endTime = Date.now() + 30 * 60 * 1000; // 30 minutes
+
+  function tick() {
+    var remaining = endTime - Date.now();
+    if (remaining <= 0) {
+      document.getElementById('timerDisplay').textContent = '00:00';
+      clearInterval(wheelTimerInterval);
+      return;
+    }
+    var mins = Math.floor(remaining / 60000);
+    var secs = Math.floor((remaining % 60000) / 1000);
+    document.getElementById('timerDisplay').textContent =
+      (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
+  }
+
+  tick();
+  wheelTimerInterval = setInterval(tick, 1000);
+}
+
+function copyVoucher() {
+  navigator.clipboard.writeText('LUCK').then(function() {
+    var btns = document.querySelectorAll('.wheel-result .btn.ghost');
+    btns.forEach(function(b) {
+      if (b.textContent.includes('Copy')) {
+        b.textContent = 'Copied!';
+        setTimeout(function() { b.textContent = 'Copy Code: LUCK'; }, 2000);
+      }
+    });
+  });
 }
 </script>
 </body>
