@@ -7,11 +7,20 @@ const PORT = process.env.PORT || 3000;
 // Serve static files from public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Fallback to index.html
+// Routes
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/landing', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'landing.html'));
+});
+
+// Fallback to index (DNA test)
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
-  console.log(`Ruang Kreatif landing page running on port ${PORT}`);
+  console.log(`Ruang Kreatif running on port ${PORT}`);
 });
