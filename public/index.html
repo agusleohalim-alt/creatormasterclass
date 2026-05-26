@@ -98,6 +98,18 @@
   }
   .urgency-banner .ub-countdown span { color: var(--paper); }
 
+  /* SEAT PROGRESS BAR */
+  .seat-progress { width: 100%; }
+  .seat-progress-bar { height: 8px; background: rgba(244,241,234,0.15); border: 1px solid rgba(244,241,234,0.3); position: relative; overflow: hidden; }
+  .seat-progress-fill { height: 100%; background: var(--urgent); width: 98%; }
+  .seat-progress-meta {
+    display: flex; justify-content: space-between; margin-top: 6px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .seat-progress-meta .taken { color: var(--urgent); font-weight: 700; }
+  .seat-progress-meta .total { opacity: 0.5; }
+
   /* BUTTONS */
   .btn {
     display: inline-flex; align-items: center; gap: 12px; padding: 18px 28px;
@@ -454,10 +466,19 @@
       semuanya disesuaikan untukmu, bukan template generik.
     </p>
 
-    <div class="urgency-banner">
-      <div class="ub-text">Batch 15 dimulai 30 Mei &mdash; sisa <span id="seatCount">47</span> seat</div>
-      <div class="ub-countdown">
-        <span id="ub-days">00</span>h <span id="ub-hours">00</span>j <span id="ub-mins">00</span>m <span id="ub-secs">00</span>d
+    <div class="urgency-banner" style="flex-direction:column;align-items:stretch;">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+        <div class="ub-text" style="color:var(--urgent);">SISA 1 SEAT &mdash; Batch 15</div>
+        <div class="ub-countdown">
+          <span id="ub-days">00</span>h <span id="ub-hours">00</span>j <span id="ub-mins">00</span>m <span id="ub-secs">00</span>d
+        </div>
+      </div>
+      <div class="seat-progress">
+        <div class="seat-progress-bar"><div class="seat-progress-fill" style="width:98%"></div></div>
+        <div class="seat-progress-meta">
+          <span class="taken">49 / 50 seat terisi</span>
+          <span class="total">Kelas dimulai 30 Mei</span>
+        </div>
       </div>
     </div>
 
@@ -533,7 +554,7 @@
     <!-- CHOSEN BADGE -->
     <div class="chosen-badge">
       <div class="pulse"></div>
-      <span id="chosenText">1 dari 50 creator terpilih untuk Batch 15</span>
+      <span id="chosenText">Sisa 1 seat &mdash; kamu bisa jadi creator ke-50</span>
     </div>
 
     <!-- LETTER BREAKDOWN -->
@@ -644,7 +665,16 @@
         Ruang Kreatif Batch 15 hanya menerima 50 creator &mdash; dan berdasarkan hasil tesmu,
         kamu punya kombinasi yang tepat untuk batch ini.
       </p>
-      <div class="seat-counter">Sisa seat: <span id="seatCount2">47</span> / 50 &mdash; Kelas dimulai 30 Mei 2026</div>
+      <div class="seat-counter">SISA 1 SEAT dari 50 &mdash; Kelas dimulai 30 Mei 2026</div>
+      <div style="max-width:400px;margin-bottom:24px;">
+        <div style="height:8px;background:rgba(244,241,234,0.15);border:1px solid rgba(244,241,234,0.3);overflow:hidden;">
+          <div style="height:100%;background:var(--urgent);width:98%;"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:4px;font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;">
+          <span style="color:var(--urgent);font-weight:700;">49 terisi</span>
+          <span style="opacity:0.5;">50 total</span>
+        </div>
+      </div>
       <a href="https://lynk.id/agusleo/AQjXRA8/checkout" target="_blank" rel="noopener noreferrer" class="btn" style="text-decoration:none;background:var(--paper);color:var(--ink);border-color:var(--paper);">
         Ambil Seat-ku Sekarang <span class="arrow">&rarr;</span>
       </a>
@@ -696,10 +726,19 @@
 
       <!-- PRICING -->
       <div class="pricing-block" id="pricingBlock">
-        <div class="seats-badge">Sisa <span id="seatCount3">47</span> dari 50 Seat</div>
+        <div class="seats-badge">SISA 1 SEAT</div>
         <div class="offer-eyebrow" style="color:rgba(244,241,234,0.5);margin-bottom:8px;">Ruang Kreatif Creator Masterclass &mdash; Batch 15</div>
         <div class="price">Rp 3.000.000</div>
         <div class="price-sub">Kelas dimulai 30 Mei 2026 &middot; Akses selamanya</div>
+        <div style="max-width:320px;margin:0 auto 24px;">
+          <div style="height:8px;background:rgba(244,241,234,0.1);border:1px solid rgba(244,241,234,0.2);overflow:hidden;">
+            <div style="height:100%;background:var(--urgent);width:98%;"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px;font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;">
+            <span style="color:var(--urgent);font-weight:700;">49 / 50 terisi</span>
+            <span style="opacity:0.4;">Sisa 1</span>
+          </div>
+        </div>
         <ul class="pricing-features">
           <li>15 modul lengkap step-by-step</li>
           <li>100-video roadmap personal berdasarkan DNA-mu</li>
@@ -744,7 +783,7 @@
 <div class="sticky-cta" id="stickyCta">
   <div class="sticky-cta-inner">
     <div class="sticky-info">
-      <div class="seats-left">Sisa <span id="seatCount4">47</span> seat &mdash; Batch 15</div>
+      <div class="seats-left">SISA 1 SEAT &mdash; Batch 15</div>
       <div class="countdown-mini" id="stickyCountdown">Mulai 30 Mei</div>
     </div>
     <a href="https://lynk.id/agusleo/AQjXRA8/checkout" target="_blank" rel="noopener noreferrer" class="btn">
@@ -1343,15 +1382,16 @@ function computeResult() {
   var archetypePct = { IPF: 8, IPB: 6, IEF: 14, IEB: 9, RPF: 12, RPB: 11, REF: 18, REB: 22 };
   var pct = archetypePct[code] || 10;
   document.getElementById('chosenText').textContent =
-    'Hanya ' + pct + '% creator punya DNA ' + code + ' — kamu salah satunya';
+    'Sisa 1 seat — hanya ' + pct + '% creator punya DNA ' + code + ' sepertimu';
 
   // Personalize chosen invite
   document.getElementById('chosenHeadline').innerHTML =
     displayName + ', DNA ' + code + '-mu sudah teridentifikasi.<br><span class="ital">Sekarang saatnya diaktifkan.</span>';
   document.getElementById('chosenBody').textContent =
     'Dari ribuan creator yang mengambil tes ini, hanya ' + pct + '% yang punya kombinasi ' + code + ' (' + arch.name + '). ' +
-    'Ruang Kreatif Batch 15 dimulai 30 Mei dan hanya menerima 50 creator — berdasarkan hasil tesmu, kamu punya fondasi yang tepat untuk batch ini. ' +
-    'Di dalam kelas, kamu akan dapat roadmap lengkap yang di-unlock khusus untuk archetype ' + code + '-mu.';
+    'Ruang Kreatif Batch 15 dimulai 30 Mei — 49 dari 50 seat sudah terisi. Tinggal 1 seat tersisa. ' +
+    'Berdasarkan DNA-mu, kamu punya fondasi yang tepat untuk jadi creator ke-50 di batch ini. ' +
+    'Di dalam kelas, roadmap lengkap archetype ' + code + '-mu sudah menunggu untuk di-unlock.';
 
   // --- LETTER BREAKDOWN ---
   var info1 = axisInfo[L1], info2 = axisInfo[L2], info3 = axisInfo[L3];
@@ -1628,33 +1668,7 @@ function copyVoucher() {
   setInterval(updateAllCountdowns, 1000);
 })();
 
-// ---------- SIMULATED SEAT COUNTER ----------
-(function() {
-  // Simulate seats being taken (creates urgency)
-  var baseSeats = 47;
-  var stored = sessionStorage.getItem('rk_seats');
-  if (stored) { baseSeats = parseInt(stored); }
-
-  function updateSeats(count) {
-    document.querySelectorAll('#seatCount, #seatCount2, #seatCount3, #seatCount4').forEach(function(el) {
-      if (el) el.textContent = count;
-    });
-    sessionStorage.setItem('rk_seats', count);
-  }
-
-  updateSeats(baseSeats);
-
-  // Randomly decrease by 1 every 3-8 minutes to create urgency
-  function scheduleDecrease() {
-    var delay = (180 + Math.floor(Math.random() * 300)) * 1000; // 3-8 min
-    setTimeout(function() {
-      baseSeats = Math.max(3, baseSeats - 1); // never go below 3
-      updateSeats(baseSeats);
-      scheduleDecrease();
-    }, delay);
-  }
-  scheduleDecrease();
-})();
+// Seat count is hardcoded to 49/50 (sisa 1) — no simulation needed.
 </script>
 </body>
 </html>
